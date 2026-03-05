@@ -47,6 +47,9 @@ import PortfolioUpdate from "./pages/portfolios/Update"
 import FaqIndex from "./pages/faqs/Index"
 import FaqCreate from "./pages/faqs/Create"
 import FaqUpdate from "./pages/faqs/Update"
+import StatisticIndex from "./pages/statistics/Index"
+import StatisticCreate from "./pages/statistics/Create"
+import StatisticUpdate from "./pages/statistics/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -117,6 +120,9 @@ function App() {
           <Route path="faqs" element={<FaqIndex />} />
           <Route path="faqs/create" element={<FaqCreate />} />
           <Route path="faqs/:id/edit" element={<FaqUpdate />} />
+          <Route path="statistics" element={<StatisticIndex />} />
+          <Route path="statistics/create" element={<StatisticCreate />} />
+          <Route path="statistics/:id/edit" element={<StatisticUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>

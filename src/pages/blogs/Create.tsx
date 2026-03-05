@@ -36,7 +36,6 @@ export default function BlogCreate() {
   const [activeTab, setActiveTab] = useState<number>(0)
 
   const [slug, setSlug] = useState('')
-  const [order, setOrder] = useState<number>(0)
   const [blogCategoryId, setBlogCategoryId] = useState<string>('')
 
   const [imagePreview, setImagePreview] = useState<string | null>(null)
