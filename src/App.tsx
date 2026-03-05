@@ -44,6 +44,9 @@ import ServiceUpdate from "./pages/services/Update"
 import PortfolioIndex from "./pages/portfolios/Index"
 import PortfolioCreate from "./pages/portfolios/Create"
 import PortfolioUpdate from "./pages/portfolios/Update"
+import FaqIndex from "./pages/faqs/Index"
+import FaqCreate from "./pages/faqs/Create"
+import FaqUpdate from "./pages/faqs/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -111,6 +114,9 @@ function App() {
           <Route path="portfolios" element={<PortfolioIndex />} />
           <Route path="portfolios/create" element={<PortfolioCreate />} />
           <Route path="portfolios/:id/edit" element={<PortfolioUpdate />} />
+          <Route path="faqs" element={<FaqIndex />} />
+          <Route path="faqs/create" element={<FaqCreate />} />
+          <Route path="faqs/:id/edit" element={<FaqUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>
