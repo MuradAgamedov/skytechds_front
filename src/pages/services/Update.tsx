@@ -262,20 +262,7 @@ export default function ServiceUpdate() {
                     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '24px', marginBottom: '24px' }}>
                         {/* General Fields */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <h3 style={{ color: '#f9fafb', borderBottom: '1px solid #374151', paddingBottom: '8px', margin: 0 }}>General Settings</h3>
-                            
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
-                                <input
-                                    type="text"
-                                    value={slug}
-                                    onChange={(e) => setSlug(e.target.value)}
-                                    style={{ width: '100%', padding: '8px 12px', border: '1px solid #4b5563', borderRadius: '6px', fontSize: '14px', backgroundColor: '#374151', color: '#f9fafb', boxSizing: 'border-box' }}
-                                    placeholder="service-slug"
-                                />
-                            </div>
-
-                            <div>
+  <div>
                                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Inner Image</label>
                                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                                     {innerImagePreview ? (

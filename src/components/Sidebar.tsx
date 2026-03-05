@@ -68,6 +68,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       children: [
         { id: 'about', label: 'About', path: '/about' },
         { id: 'services', label: 'Services', path: '/services' },
+        { id: 'portfolios', label: 'Portfolios', path: '/portfolios' },
       ],
     },
 
