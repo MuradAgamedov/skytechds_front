@@ -13,8 +13,8 @@ export default function BlogCategoryCreate() {
   const navigate = useNavigate()
   const [languages, setLanguages] = useState<Language[]>([])
   const [activeTab, setActiveTab] = useState<number>(0)
-
   const [slug, setSlug] = useState('')
+
   const [titles, setTitles] = useState<Record<number, string>>({})
   const [seoTitles, setSeoTitles] = useState<Record<number, string>>({})
   const [seoDescriptions, setSeoDescriptions] = useState<Record<number, string>>({})
@@ -147,6 +147,7 @@ export default function BlogCategoryCreate() {
             />
           </div>
 
+        
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', borderBottom: '1px solid #374151' }}>
               {languages.map((language, index) => (

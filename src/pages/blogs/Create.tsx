@@ -108,12 +108,12 @@ export default function BlogCreate() {
       }
 
       languages.forEach(lang => {
-        if (titles[lang.id]) formData.append(`translations[title][${lang.id}]`, titles[lang.id])
-        if (descriptions[lang.id]) formData.append(`translations[description][${lang.id}]`, descriptions[lang.id])
-        if (seoTitles[lang.id]) formData.append(`translations[seo_title][${lang.id}]`, seoTitles[lang.id])
-        if (seoDescriptions[lang.id]) formData.append(`translations[seo_description][${lang.id}]`, seoDescriptions[lang.id])
-        if (seoKeywords[lang.id]) formData.append(`translations[seo_keywords][${lang.id}]`, seoKeywords[lang.id])
-        if (cardImageAltTexts[lang.id]) formData.append(`translations[card_image_alt_text][${lang.id}]`, cardImageAltTexts[lang.id])
+        formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
+        formData.append(`translations[description][${lang.id}]`, descriptions[lang.id] || '')
+        formData.append(`translations[seo_title][${lang.id}]`, seoTitles[lang.id] || '')
+        formData.append(`translations[seo_description][${lang.id}]`, seoDescriptions[lang.id] || '')
+        formData.append(`translations[seo_keywords][${lang.id}]`, seoKeywords[lang.id] || '')
+        formData.append(`translations[card_image_alt_text][${lang.id}]`, cardImageAltTexts[lang.id] || '')
       })
 
       const response = await fetch(`${apiUrl}/admin/blogs`, {

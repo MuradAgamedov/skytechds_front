@@ -159,7 +159,7 @@ export default function ServicesIndex() {
                             <tr style={{ backgroundColor: '#374151' }}>
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Icon</th>
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '25%' }}>Title</th>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '10%' }}>Order</th>
+                        
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Actions</th>
                             </tr>
                         </thead>
@@ -212,11 +212,7 @@ export default function ServicesIndex() {
                                             {getTranslationTextFromNested(service.translations) || 'Untitled'}
                                         </div>
                                     </td>
-                                    <td style={{ padding: '12px', borderBottom: '1px solid #374151', color: '#f9fafb' }}>
-                                        <div style={{ fontSize: '14px', color: '#9ca3af' }}>
-                                            {service.order}
-                                        </div>
-                                    </td>
+                                 
                                     <td style={{ padding: '12px', borderBottom: '1px solid #374151' }}>
                                         <div style={{ display: 'flex', gap: '8px' }}>
                                             <button

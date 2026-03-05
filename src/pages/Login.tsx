@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext.js'
 
 interface LoginResponse {
   success: boolean
@@ -15,6 +16,7 @@ interface LoginResponse {
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -28,27 +30,14 @@ export default function Login() {
     setError('')
 
     try {
-      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
-      const response = await fetch(`${apiUrl}/admin/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      const data: LoginResponse = await response.json()
-
-      if (data.success) {
-        // Store token and user data
-        localStorage.setItem('auth_token', data.data.token)
-        localStorage.setItem('user_data', JSON.stringify(data.data.user))
-        
-        console.log('Login successful:', data)
+      const success = await login(formData.email, formData.password)
+      
+      if (success) {
+        console.log('Login successful')
         // Navigate to dashboard
         navigate('/')
       } else {
-        setError(data.message || 'Login failed')
+        setError('Login failed')
       }
     } catch (err) {
       setError('An error occurred during login')

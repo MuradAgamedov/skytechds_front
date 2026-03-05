@@ -15,7 +15,6 @@ export default function ServiceUpdate() {
     const [languages, setLanguages] = useState<Language[]>([])
     const [activeTab, setActiveTab] = useState<number>(0)
 
-    const [order, setOrder] = useState<number>(0)
 
     const [icon, setIcon] = useState<File | null>(null)
     const [iconPreview, setIconPreview] = useState<string>('')
@@ -31,6 +30,7 @@ export default function ServiceUpdate() {
     const [seoTitles, setSeoTitles] = useState<Record<number, string>>({})
     const [seoDescriptions, setSeoDescriptions] = useState<Record<number, string>>({})
     const [seoKeywords, setSeoKeywords] = useState<Record<number, string>>({})
+    const [slug, setSlug] = useState<string>('')
 
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
@@ -76,7 +76,9 @@ export default function ServiceUpdate() {
             const data = await response.json()
             const service = data.data
 
-            setOrder(service.order || 0)
+            if (service.slug) {
+                setSlug(service.slug)
+            }
 
             if (service.icon) {
                 setIconPreview(service.icon)
@@ -165,7 +167,7 @@ export default function ServiceUpdate() {
             const formData = new FormData()
 
             formData.append('_method', 'PUT')
-            formData.append('order', order.toString())
+            formData.append('slug', slug)
 
             if (icon) {
                 formData.append('icon', icon)
@@ -261,57 +263,16 @@ export default function ServiceUpdate() {
                         {/* General Fields */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <h3 style={{ color: '#f9fafb', borderBottom: '1px solid #374151', paddingBottom: '8px', margin: 0 }}>General Settings</h3>
-
+                            
                             <div>
-                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Order</label>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
                                 <input
-                                    type="number"
-                                    value={order}
-                                    onChange={(e) => setOrder(parseInt(e.target.value) || 0)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '8px 12px',
-                                        border: '1px solid #4b5563',
-                                        borderRadius: '6px',
-                                        fontSize: '14px',
-                                        backgroundColor: '#374151',
-                                        color: '#f9fafb',
-                                        boxSizing: 'border-box'
-                                    }}
+                                    type="text"
+                                    value={slug}
+                                    onChange={(e) => setSlug(e.target.value)}
+                                    style={{ width: '100%', padding: '8px 12px', border: '1px solid #4b5563', borderRadius: '6px', fontSize: '14px', backgroundColor: '#374151', color: '#f9fafb', boxSizing: 'border-box' }}
+                                    placeholder="service-slug"
                                 />
-                            </div>
-                        </div>
-
-                        {/* Media Uploads */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <h3 style={{ color: '#f9fafb', borderBottom: '1px solid #374151', paddingBottom: '8px', margin: 0 }}>Media</h3>
-
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Service Icon</label>
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                                    {iconPreview ? (
-                                        <div style={{ position: 'relative', width: '120px', height: '120px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #4b5563', backgroundColor: '#374151' }}>
-                                            <img src={iconPreview} alt="Icon Preview" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                                            <button
-                                                type="button"
-                                                onClick={() => removeImage(setIcon, setIconPreview)}
-                                                style={{ position: 'absolute', top: '4px', right: '4px', backgroundColor: 'rgba(239, 68, 68, 0.9)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-                                            >
-                                                <X size={14} />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div style={{ width: '120px', height: '120px', borderRadius: '8px', border: '2px dashed #4b5563', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#374151' }}>
-                                            <span style={{ color: '#9ca3af', fontSize: '12px' }}>No icon</span>
-                                        </div>
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageChange(e, setIcon, setIconPreview)}
-                                        style={{ color: '#f9fafb' }}
-                                    />
-                                </div>
                             </div>
 
                             <div>
@@ -341,7 +302,41 @@ export default function ServiceUpdate() {
                                     />
                                 </div>
                             </div>
+                         
+                        </div>
 
+                        {/* Media Uploads */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Service Icon</label>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
+                                    {iconPreview ? (
+                                        <div style={{ position: 'relative', width: '120px', height: '120px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #4b5563', backgroundColor: '#374151' }}>
+                                            <img src={iconPreview} alt="Icon Preview" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage(setIcon, setIconPreview)}
+                                                style={{ position: 'absolute', top: '4px', right: '4px', backgroundColor: 'rgba(239, 68, 68, 0.9)', color: 'white', border: 'none', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div style={{ width: '120px', height: '120px', borderRadius: '8px', border: '2px dashed #4b5563', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#374151' }}>
+                                            <span style={{ color: '#9ca3af', fontSize: '12px' }}>No icon</span>
+                                        </div>
+                                    )}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageChange(e, setIcon, setIconPreview)}
+                                        style={{ color: '#f9fafb' }}
+                                    />
+                                </div>
+                            </div>
+
+                   
                         </div>
                     </div>
 
