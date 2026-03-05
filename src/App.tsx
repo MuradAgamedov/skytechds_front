@@ -29,6 +29,9 @@ import TranslationsIndex from "./pages/translations/Index"
 import TranslationCreate from "./pages/translations/Create"
 import TranslationUpdate from "./pages/translations/Update"
 import AboutUpdate from "./pages/about/Update"
+import BlogCategoriesIndex from "./pages/blog-categories/Index"
+import BlogCategoryCreate from "./pages/blog-categories/Create"
+import BlogCategoryUpdate from "./pages/blog-categories/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -81,6 +84,9 @@ function App() {
           <Route path="translations/create" element={<TranslationCreate />} />
           <Route path="translations/update/:id" element={<TranslationUpdate />} />
           <Route path="about" element={<AboutUpdate />} />
+          <Route path="blog-categories" element={<BlogCategoriesIndex />} />
+          <Route path="blog-categories/create" element={<BlogCategoryCreate />} />
+          <Route path="blog-categories/update/:id" element={<BlogCategoryUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>

@@ -14,6 +14,8 @@ import {
   Share2,
   MessageSquare,
   FileText,
+  BookOpen,
+  FolderTree,
 } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -65,6 +67,15 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       icon: FileText,
       children: [
         { id: 'about', label: 'About', path: '/about' },
+      ],
+    },
+
+    {
+      id: 'blogs',
+      label: 'Blogs',
+      icon: BookOpen,
+      children: [
+        { id: 'blog-categories', label: 'Blog Categories', path: '/blog-categories' },
       ],
     },
 
