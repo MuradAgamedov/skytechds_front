@@ -13,6 +13,7 @@ import {
   Map,
   Share2,
   MessageSquare,
+  FileText,
 } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -39,6 +40,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       icon: Briefcase,
       children: [
         { id: 'language-list', label: 'Languages', path: '/languages' },
+        { id: 'dictionaries', label: 'Dictionary', path: '/dictionaries' },
         { id: 'translations', label: 'Translations', path: '/translations' },
       ],
     },
@@ -54,6 +56,15 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         { id: 'addresses', label: 'Addresses', path: '/addresses' },
         { id: 'social-networks', label: 'Social Networks', path: '/social-networks' },
         { id: 'contact-messages', label: 'Contact Messages', path: '/contact-messages' },
+      ],
+    },
+
+    {
+      id: 'content',
+      label: 'Content',
+      icon: FileText,
+      children: [
+        { id: 'about', label: 'About', path: '/about' },
       ],
     },
 

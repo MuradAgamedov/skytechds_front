@@ -22,6 +22,13 @@ import SocialNetworkCreate from "./pages/social-networks/Create"
 import SocialNetworkUpdate from "./pages/social-networks/Update"
 import ContactMessagesIndex from "./pages/contact-messages/Index"
 import Login from "./pages/Login"
+import DictionariesIndex from "./pages/dictionaries/Index"
+import DictionaryCreate from "./pages/dictionaries/Create"
+import DictionaryUpdate from "./pages/dictionaries/Update"
+import TranslationsIndex from "./pages/translations/Index"
+import TranslationCreate from "./pages/translations/Create"
+import TranslationUpdate from "./pages/translations/Update"
+import AboutUpdate from "./pages/about/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -67,6 +74,13 @@ function App() {
           <Route path="social-networks/create" element={<SocialNetworkCreate />} />
           <Route path="social-networks/update/:id" element={<SocialNetworkUpdate />} />
           <Route path="contact-messages" element={<ContactMessagesIndex />} />
+          <Route path="dictionaries" element={<DictionariesIndex />} />
+          <Route path="dictionaries/create" element={<DictionaryCreate />} />
+          <Route path="dictionaries/update/:id" element={<DictionaryUpdate />} />
+          <Route path="translations" element={<TranslationsIndex />} />
+          <Route path="translations/create" element={<TranslationCreate />} />
+          <Route path="translations/update/:id" element={<TranslationUpdate />} />
+          <Route path="about" element={<AboutUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>
