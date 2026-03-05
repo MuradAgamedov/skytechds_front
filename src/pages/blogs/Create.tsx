@@ -25,6 +25,7 @@ export default function BlogCreate() {
   const [activeTab, setActiveTab] = useState<number>(0)
 
   const [slug, setSlug] = useState('')
+  const [order, setOrder] = useState<number>(0)
   const [blogCategoryId, setBlogCategoryId] = useState<string>('')
 
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -96,6 +97,7 @@ export default function BlogCreate() {
 
       const formData = new FormData()
       formData.append('slug', slug)
+      formData.append('order', order.toString())
 
       if (blogCategoryId) {
         formData.append('blog_category_id', blogCategoryId)
@@ -175,7 +177,7 @@ export default function BlogCreate() {
       <div style={{ backgroundColor: '#1f2937', borderRadius: '8px', border: '1px solid #374151', padding: '24px', maxWidth: '800px' }}>
         <form onSubmit={handleSubmit}>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '24px' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
               <input
@@ -194,6 +196,26 @@ export default function BlogCreate() {
                   boxSizing: 'border-box'
                 }}
                 placeholder="e.g. latest-tech-trends"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Order</label>
+              <input
+                type="number"
+                value={order}
+                onChange={(e) => setOrder(Number(e.target.value))}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #4b5563',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  backgroundColor: '#374151',
+                  color: '#f9fafb',
+                  boxSizing: 'border-box'
+                }}
+                placeholder="0"
               />
             </div>
 

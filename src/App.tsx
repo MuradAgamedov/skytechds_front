@@ -38,6 +38,9 @@ import BlogUpdate from "./pages/blogs/Update"
 import TagsIndex from "./pages/tags/Index"
 import TagCreate from "./pages/tags/Create"
 import TagUpdate from "./pages/tags/Update"
+import ServicesIndex from "./pages/services/Index"
+import ServiceCreate from "./pages/services/Create"
+import ServiceUpdate from "./pages/services/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -99,6 +102,9 @@ function App() {
           <Route path="tags" element={<TagsIndex />} />
           <Route path="tags/create" element={<TagCreate />} />
           <Route path="tags/update/:id" element={<TagUpdate />} />
+          <Route path="services" element={<ServicesIndex />} />
+          <Route path="services/create" element={<ServiceCreate />} />
+          <Route path="services/update/:id" element={<ServiceUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>

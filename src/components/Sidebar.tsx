@@ -67,6 +67,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       icon: FileText,
       children: [
         { id: 'about', label: 'About', path: '/about' },
+        { id: 'services', label: 'Services', path: '/services' },
       ],
     },
 
