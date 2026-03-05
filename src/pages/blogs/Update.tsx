@@ -18,11 +18,22 @@ interface BlogCategory {
   }>
 }
 
+interface BlogTag {
+  id: number
+  translations: Array<{
+    id: number
+    title: string
+  }>
+  status: number
+}
+
 export default function BlogUpdate() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [languages, setLanguages] = useState<Language[]>([])
   const [categories, setCategories] = useState<BlogCategory[]>([])
+  const [tags, setTags] = useState<BlogTag[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<number>(0)
 
   const [slug, setSlug] = useState('')
@@ -46,6 +57,7 @@ export default function BlogUpdate() {
   useEffect(() => {
     fetchLanguages()
       .then(() => fetchCategories())
+      .then(() => fetchTags())
       .then(() => fetchBlog())
   }, [id])
 
@@ -81,6 +93,22 @@ export default function BlogUpdate() {
     }
   }
 
+  const fetchTags = async () => {
+    try {
+      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+      const token = localStorage.getItem('auth_token')
+      const response = await fetch(`${apiUrl}/admin/tags`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setTags(data.data || [])
+      }
+    } catch (err) {
+      console.error('Error fetching tags:', err)
+    }
+  }
+
   const fetchBlog = async () => {
     try {
       const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
@@ -105,6 +133,16 @@ export default function BlogUpdate() {
       const initialSeoDescriptions: Record<number, string> = {}
       const initialSeoKeywords: Record<number, string> = {}
       const initialCardImageAltTexts: Record<number, string> = {}
+      const initialSelectedTags: string[] = []
+
+      if (blog.tags && Array.isArray(blog.tags)) {
+        blog.tags.forEach((tag: any) => {
+          if (tag.id) {
+            initialSelectedTags.push(tag.id.toString())
+          }
+        })
+      }
+      setSelectedTags(initialSelectedTags)
 
       if (blog.translations && Array.isArray(blog.translations)) {
         blog.translations.forEach((t: any) => {
@@ -164,6 +202,10 @@ export default function BlogUpdate() {
         formData.append('card_image', imageFile)
       }
 
+      selectedTags.forEach((tagId, index) => {
+        formData.append(`tags[${index}]`, tagId)
+      })
+
       languages.forEach(lang => {
         formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
         formData.append(`translations[description][${lang.id}]`, descriptions[lang.id] || '')
@@ -215,6 +257,13 @@ export default function BlogUpdate() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const getTagTitle = (tag: BlogTag) => {
+    if (!tag.translations || tag.translations.length === 0) return `Tag ${tag.id}`
+    const azTitle = tag.translations.find(t => t.id === 1)?.title
+    const enTitle = tag.translations.find(t => t.id === 2)?.title
+    return azTitle || enTitle || tag.translations[0]?.title || `Tag ${tag.id}`
   }
 
   const getCategoryTitle = (category: BlogCategory) => {
@@ -280,6 +329,30 @@ export default function BlogUpdate() {
                 <option value="">Select Category (Optional)</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{getCategoryTitle(cat)} (ID: {cat.id})</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Tags</label>
+              <select
+                multiple
+                value={selectedTags}
+                onChange={(e) => setSelectedTags(Array.from(e.target.selectedOptions, option => option.value))}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #4b5563',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  backgroundColor: '#374151',
+                  color: '#f9fafb',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <option value="" disabled>Select Tags (Optional)</option>
+                {tags.map(tag => (
+                  <option key={tag.id} value={tag.id.toString()}>{getTagTitle(tag)}</option>
                 ))}
               </select>
             </div>

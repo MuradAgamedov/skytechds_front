@@ -18,10 +18,21 @@ interface BlogCategory {
   }>
 }
 
+interface BlogTag {
+  id: number
+  translations: Array<{
+    id: number
+    title: string
+  }>
+  status: number
+}
+
 export default function BlogCreate() {
   const navigate = useNavigate()
   const [languages, setLanguages] = useState<Language[]>([])
   const [categories, setCategories] = useState<BlogCategory[]>([])
+  const [tags, setTags] = useState<BlogTag[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<number>(0)
 
   const [slug, setSlug] = useState('')
@@ -44,6 +55,7 @@ export default function BlogCreate() {
   useEffect(() => {
     fetchLanguages()
     fetchCategories()
+    fetchTags()
   }, [])
 
   const fetchLanguages = async () => {
@@ -78,6 +90,22 @@ export default function BlogCreate() {
     }
   }
 
+  const fetchTags = async () => {
+    try {
+      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+      const token = localStorage.getItem('auth_token')
+      const response = await fetch(`${apiUrl}/admin/tags`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setTags(data.data || [])
+      }
+    } catch (err) {
+      console.error('Error fetching tags:', err)
+    }
+  }
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
@@ -106,6 +134,10 @@ export default function BlogCreate() {
       if (imageFile) {
         formData.append('card_image', imageFile)
       }
+
+      selectedTags.forEach((tagId, index) => {
+        formData.append(`tags[${index}]`, tagId)
+      })
 
       languages.forEach(lang => {
         formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
@@ -158,6 +190,13 @@ export default function BlogCreate() {
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const getTagTitle = (tag: BlogTag) => {
+    if (!tag.translations || tag.translations.length === 0) return `Tag ${tag.id}`
+    const azTitle = tag.translations.find(t => t.id === 1)?.title
+    const enTitle = tag.translations.find(t => t.id === 2)?.title
+    return azTitle || enTitle || tag.translations[0]?.title || `Tag ${tag.id}`
   }
 
   const getCategoryTitle = (category: BlogCategory) => {
@@ -220,6 +259,30 @@ export default function BlogCreate() {
                 <option value="">Select Category (Optional)</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{getCategoryTitle(cat)} (ID: {cat.id})</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Tags</label>
+              <select
+                multiple
+                value={selectedTags}
+                onChange={(e) => setSelectedTags(Array.from(e.target.selectedOptions, option => option.value))}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #4b5563',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  backgroundColor: '#374151',
+                  color: '#f9fafb',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <option value="" disabled>Select Tags (Optional)</option>
+                {tags.map(tag => (
+                  <option key={tag.id} value={tag.id.toString()}>{getTagTitle(tag)}</option>
                 ))}
               </select>
             </div>
