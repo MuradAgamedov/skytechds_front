@@ -88,8 +88,9 @@ export default function StatisticUpdate() {
       const initialIconAltTexts: Record<number, string> = {}
 
       if (statistic.translations && Array.isArray(statistic.translations)) {
-        statistic.translations.forEach((t: any) => {
-          const languageId = t.language_id
+        statistic.translations.forEach((t: any, index: number) => {
+          // Use index+1 as language_id since it's not provided by API
+          const languageId = index + 1
           initialTitles[languageId] = t.title || ''
           initialSubtitles[languageId] = t.subtitle || ''
           initialIconAltTexts[languageId] = t.icon_alt_text || ''
@@ -134,15 +135,22 @@ export default function StatisticUpdate() {
       const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
       const token = localStorage.getItem('auth_token')
 
-      const formData = new FormData()
-      formData.append('_method', 'PUT')
-      formData.append('status', status === 1 ? 'true' : 'false')
+      // Create JSON data for all fields except icon
+      const jsonData: any = {
+        status: status === 1 ? true : false,
+        translations: {}
+      }
 
+      // Add translations in flat format (API expects this)
       languages.forEach(lang => {
-        formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
-        formData.append(`translations[subtitle][${lang.id}]`, subtitles[lang.id] || '')
-        formData.append(`translations[icon_alt_text][${lang.id}]`, iconAltTexts[lang.id] || '')
+        jsonData.translations[`title.${lang.id}`] = titles[lang.id] || ''
+        jsonData.translations[`subtitle.${lang.id}`] = subtitles[lang.id] || ''
+        jsonData.translations[`icon_alt_text.${lang.id}`] = iconAltTexts[lang.id] || ''
       })
+
+      // Create FormData and add JSON data
+      const formData = new FormData()
+      formData.append('data', JSON.stringify(jsonData))
 
       // Add icon file if exists
       if (icon) {
@@ -150,7 +158,7 @@ export default function StatisticUpdate() {
       }
 
       const response = await fetch(`${apiUrl}/admin/statistics/${id}`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -163,7 +171,7 @@ export default function StatisticUpdate() {
       }
 
       const data = await response.json()
-
+      
       await Swal.fire({
         title: 'Success!',
         text: 'Statistic updated successfully.',

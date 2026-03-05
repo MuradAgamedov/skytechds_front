@@ -75,11 +75,21 @@ export default function StatisticCreate() {
 
       const formData = new FormData()
       formData.append('status', status === 1 ? 'true' : 'false')
-
+      
+      // Add translations as JSON object
+      const translations: any = {}
       languages.forEach(lang => {
-        formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
-        formData.append(`translations[subtitle][${lang.id}]`, subtitles[lang.id] || '')
-        formData.append(`translations[icon_alt_text][${lang.id}]`, iconAltTexts[lang.id] || '')
+        translations[`title.${lang.id}`] = titles[lang.id] || ''
+        translations[`subtitle.${lang.id}`] = subtitles[lang.id] || ''
+        translations[`icon_alt_text.${lang.id}`] = iconAltTexts[lang.id] || ''
+      })
+      formData.append('translations', JSON.stringify(translations))
+
+      // Also add individual fields for FormData compatibility
+      languages.forEach(lang => {
+        formData.append(`translations[title.${lang.id}]`, titles[lang.id] || '')
+        formData.append(`translations[subtitle.${lang.id}]`, subtitles[lang.id] || '')
+        formData.append(`translations[icon_alt_text.${lang.id}]`, iconAltTexts[lang.id] || '')
       })
 
       // Add icon file if exists
