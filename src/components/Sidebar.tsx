@@ -76,6 +76,8 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       icon: BookOpen,
       children: [
         { id: 'blog-categories', label: 'Blog Categories', path: '/blog-categories' },
+        { id: 'blogs', label: 'Blogs', path: '/blogs' },
+        { id: 'tags', label: 'Tags', path: '/tags' },
       ],
     },
 

@@ -32,6 +32,12 @@ import AboutUpdate from "./pages/about/Update"
 import BlogCategoriesIndex from "./pages/blog-categories/Index"
 import BlogCategoryCreate from "./pages/blog-categories/Create"
 import BlogCategoryUpdate from "./pages/blog-categories/Update"
+import BlogsIndex from "./pages/blogs/Index"
+import BlogCreate from "./pages/blogs/Create"
+import BlogUpdate from "./pages/blogs/Update"
+import TagsIndex from "./pages/tags/Index"
+import TagCreate from "./pages/tags/Create"
+import TagUpdate from "./pages/tags/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -87,6 +93,12 @@ function App() {
           <Route path="blog-categories" element={<BlogCategoriesIndex />} />
           <Route path="blog-categories/create" element={<BlogCategoryCreate />} />
           <Route path="blog-categories/update/:id" element={<BlogCategoryUpdate />} />
+          <Route path="blogs" element={<BlogsIndex />} />
+          <Route path="blogs/create" element={<BlogCreate />} />
+          <Route path="blogs/update/:id" element={<BlogUpdate />} />
+          <Route path="tags" element={<TagsIndex />} />
+          <Route path="tags/create" element={<TagCreate />} />
+          <Route path="tags/update/:id" element={<TagUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>

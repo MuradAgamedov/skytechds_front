@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { ArrowLeft, Save } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 interface Language {
   id: number
@@ -9,41 +9,17 @@ interface Language {
   lang_code: string
 }
 
-interface TranslationData {
-  title: Record<number, string>
-  seo_title: Record<number, string>
-  seo_description: Record<number, string>
-  seo_keywords: Record<number, string>
-}
-
-interface BlogCategory {
-  id: number
-  slug: string
-  translations: Array<{
-    id: number
-    title: string
-    seo_title: string
-    seo_description: string
-    seo_keywords: string
-    language_id: number
-  }>
-  status: number
-  created_at: string
-  updated_at: string
-}
-
 export default function BlogCategoryCreate() {
   const navigate = useNavigate()
   const [languages, setLanguages] = useState<Language[]>([])
   const [activeTab, setActiveTab] = useState<number>(0)
+
   const [slug, setSlug] = useState('')
-  const [translations, setTranslations] = useState<TranslationData>({
-    title: {},
-    seo_title: {},
-    seo_description: {},
-    seo_keywords: {}
-  })
-  const [loading, setLoading] = useState(false)
+  const [titles, setTitles] = useState<Record<number, string>>({})
+  const [seoTitles, setSeoTitles] = useState<Record<number, string>>({})
+  const [seoDescriptions, setSeoDescriptions] = useState<Record<number, string>>({})
+  const [seoKeywords, setSeoKeywords] = useState<Record<number, string>>({})
+
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -53,42 +29,20 @@ export default function BlogCategoryCreate() {
 
   const fetchLanguages = async () => {
     try {
-      const apiUrl = (import.meta.env as any)?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
       const token = localStorage.getItem('auth_token')
-      
       const response = await fetch(`${apiUrl}/admin/languages`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      if (!response.ok) {
-        throw new Error('Failed to fetch languages')
-      }
+      if (!response.ok) throw new Error('Failed to fetch languages')
       const data = await response.json()
       setLanguages(data.data || [])
     } catch (err) {
       console.error('Error fetching languages:', err)
+      setErrorMessage('Failed to load languages.')
     }
-  }
-
-  const handleSlugChange = (value: string) => {
-    // Convert to slug format: lowercase letters, numbers, and hyphens only
-    const slug = value.toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-      .replace(/^-|-$/g, '') // Remove leading/trailing hyphens
-    setSlug(slug)
-  }
-
-  const handleTranslationChange = (field: keyof TranslationData, languageId: number, value: string) => {
-    setTranslations(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        [languageId]: value
-      }
-    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -97,41 +51,38 @@ export default function BlogCategoryCreate() {
     setSubmitting(true)
 
     try {
-      const apiUrl = (import.meta.env as any)?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
       const token = localStorage.getItem('auth_token')
 
-      const formData = new FormData()
+      const payload: any = {
+        slug: slug,
+        translations: {
+          title: {},
+          seo_title: {},
+          seo_description: {},
+          seo_keywords: {}
+        }
+      }
 
-      // Add slug
-      formData.append('slug', slug)
-
-      // Add translations in the format backend expects
       languages.forEach(lang => {
-        if (translations.title[lang.id]) {
-          formData.append(`translations[title][${lang.id}]`, translations.title[lang.id])
-        }
-        if (translations.seo_title[lang.id]) {
-          formData.append(`translations[seo_title][${lang.id}]`, translations.seo_title[lang.id])
-        }
-        if (translations.seo_description[lang.id]) {
-          formData.append(`translations[seo_description][${lang.id}]`, translations.seo_description[lang.id])
-        }
-        if (translations.seo_keywords[lang.id]) {
-          formData.append(`translations[seo_keywords][${lang.id}]`, translations.seo_keywords[lang.id])
-        }
+        if (titles[lang.id]) payload.translations.title[lang.id] = titles[lang.id]
+        if (seoTitles[lang.id]) payload.translations.seo_title[lang.id] = seoTitles[lang.id]
+        if (seoDescriptions[lang.id]) payload.translations.seo_description[lang.id] = seoDescriptions[lang.id]
+        if (seoKeywords[lang.id]) payload.translations.seo_keywords[lang.id] = seoKeywords[lang.id]
       })
 
       const response = await fetch(`${apiUrl}/admin/blog-categories`, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: formData
+        body: JSON.stringify(payload)
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to create blog category')
+        const text = await response.text()
+        throw new Error(`Failed to create blog category: ${text}`)
       }
 
       await Swal.fire({
@@ -143,10 +94,17 @@ export default function BlogCategoryCreate() {
 
       navigate('/blog-categories')
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unknown error'
-      console.error('Error creating blog category:', msg)
-      setErrorMessage(msg)
+      console.error('Error creating blog category:', err)
 
+      let msg = err instanceof Error ? err.message : 'Unknown error'
+      try {
+        const jsonError = JSON.parse(msg.replace('Failed to create blog category: ', ''))
+        if (jsonError.errors) {
+          msg = Object.values(jsonError.errors).flat().join('\n')
+        }
+      } catch (e) { }
+
+      setErrorMessage(msg)
       await Swal.fire({
         title: 'Error!',
         text: msg,
@@ -158,51 +116,23 @@ export default function BlogCategoryCreate() {
     }
   }
 
-  if (loading && languages.length === 0) {
-    return <div style={{ padding: '20px' }}>Loading...</div>
-  }
-
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '24px' }}>
-        <button 
-          onClick={() => navigate('/blog-categories')}
-          style={{
-            backgroundColor: '#374151',
-            color: '#f9fafb',
-            border: '1px solid #4b5563',
-            borderRadius: '6px',
-            padding: '8px 16px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '500',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          <ArrowLeft size={16} />
-          Back to List
-        </button>
-      </div>
-
-      <div style={{ marginBottom: '24px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0, color: '#f9fafb' }}>Create Blog Category</h1>
-        <p style={{ color: '#6b7280', margin: '4px 0 0 0' }}>Create a new blog category with multilingual support</p>
+        <p style={{ color: '#6b7280', margin: '4px 0 0 0' }}>Add a new category for your blogs</p>
       </div>
 
       <div style={{ backgroundColor: '#1f2937', borderRadius: '8px', border: '1px solid #374151', padding: '24px', maxWidth: '800px' }}>
         <form onSubmit={handleSubmit}>
 
-          {/* Slug Field */}
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>
-              Slug *
-            </label>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
             <input
               type="text"
               value={slug}
-              onChange={(e) => handleSlugChange(e.target.value)}
+              onChange={(e) => setSlug(e.target.value)}
+              required
               style={{
                 width: '100%',
                 padding: '8px 12px',
@@ -213,15 +143,10 @@ export default function BlogCategoryCreate() {
                 color: '#f9fafb',
                 boxSizing: 'border-box'
               }}
-              placeholder="Enter slug (e.g., my-category)"
-              required
+              placeholder="e.g. tech-news"
             />
-            <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '8px' }}>
-              URL-friendly version of the name. Only lowercase letters, numbers, and hyphens allowed.
-            </p>
           </div>
 
-          {/* Translation Tabs */}
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', borderBottom: '1px solid #374151' }}>
               {languages.map((language, index) => (
@@ -247,19 +172,16 @@ export default function BlogCategoryCreate() {
             </div>
           </div>
 
-          {/* Tab Content */}
           <div style={{ marginBottom: '24px' }}>
             {languages.map((language, index) => (
               <div key={language.id} style={{ display: activeTab === index ? 'block' : 'none' }}>
 
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>
-                    Title ({language.title}) *
-                  </label>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Title ({language.title})</label>
                   <input
                     type="text"
-                    value={translations.title[language.id] || ''}
-                    onChange={(e) => handleTranslationChange('title', language.id, e.target.value)}
+                    value={titles[language.id] || ''}
+                    onChange={(e) => setTitles(prev => ({ ...prev, [language.id]: e.target.value }))}
                     style={{
                       width: '100%',
                       padding: '8px 12px',
@@ -270,19 +192,16 @@ export default function BlogCategoryCreate() {
                       color: '#f9fafb',
                       boxSizing: 'border-box'
                     }}
-                    placeholder={`Enter title in ${language.title}`}
-                    required
+                    placeholder="Category title"
                   />
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>
-                    SEO Title ({language.title})
-                  </label>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>SEO Title ({language.title})</label>
                   <input
                     type="text"
-                    value={translations.seo_title[language.id] || ''}
-                    onChange={(e) => handleTranslationChange('seo_title', language.id, e.target.value)}
+                    value={seoTitles[language.id] || ''}
+                    onChange={(e) => setSeoTitles(prev => ({ ...prev, [language.id]: e.target.value }))}
                     style={{
                       width: '100%',
                       padding: '8px 12px',
@@ -293,17 +212,15 @@ export default function BlogCategoryCreate() {
                       color: '#f9fafb',
                       boxSizing: 'border-box'
                     }}
-                    placeholder={`Enter SEO title in ${language.title}`}
+                    placeholder="SEO title"
                   />
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>
-                    SEO Description ({language.title})
-                  </label>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>SEO Description ({language.title})</label>
                   <textarea
-                    value={translations.seo_description[language.id] || ''}
-                    onChange={(e) => handleTranslationChange('seo_description', language.id, e.target.value)}
+                    value={seoDescriptions[language.id] || ''}
+                    onChange={(e) => setSeoDescriptions(prev => ({ ...prev, [language.id]: e.target.value }))}
                     rows={3}
                     style={{
                       width: '100%',
@@ -316,18 +233,16 @@ export default function BlogCategoryCreate() {
                       resize: 'vertical',
                       boxSizing: 'border-box'
                     }}
-                    placeholder={`Enter SEO description in ${language.title}`}
+                    placeholder="SEO description"
                   />
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>
-                    SEO Keywords ({language.title})
-                  </label>
+                  <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>SEO Keywords ({language.title})</label>
                   <input
                     type="text"
-                    value={translations.seo_keywords[language.id] || ''}
-                    onChange={(e) => handleTranslationChange('seo_keywords', language.id, e.target.value)}
+                    value={seoKeywords[language.id] || ''}
+                    onChange={(e) => setSeoKeywords(prev => ({ ...prev, [language.id]: e.target.value }))}
                     style={{
                       width: '100%',
                       padding: '8px 12px',
@@ -338,7 +253,7 @@ export default function BlogCategoryCreate() {
                       color: '#f9fafb',
                       boxSizing: 'border-box'
                     }}
-                    placeholder={`Enter SEO keywords in ${language.title} (comma separated)`}
+                    placeholder="keyword1, keyword2"
                   />
                 </div>
               </div>
@@ -351,7 +266,8 @@ export default function BlogCategoryCreate() {
               color: 'white',
               padding: '8px',
               borderRadius: '4px',
-              marginBottom: '16px'
+              marginBottom: '16px',
+              whiteSpace: 'pre-line'
             }}>
               {errorMessage}
             </div>
@@ -369,11 +285,30 @@ export default function BlogCategoryCreate() {
                 padding: '8px 16px',
                 cursor: submitting ? 'not-allowed' : 'pointer',
                 fontSize: '14px',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <Plus size={16} />
+              {submitting ? 'Creating...' : 'Create Blog Category'}
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate('/blog-categories')}
+              style={{
+                backgroundColor: '#374151',
+                color: '#f9fafb',
+                border: '1px solid #4b5563',
+                borderRadius: '6px',
+                padding: '8px 16px',
+                cursor: 'pointer',
+                fontSize: '14px',
                 fontWeight: '500'
               }}
             >
-              <Save size={16} style={{ marginRight: '8px' }} />
-              {submitting ? 'Creating...' : 'Create Category'}
+              Cancel
             </button>
           </div>
         </form>
