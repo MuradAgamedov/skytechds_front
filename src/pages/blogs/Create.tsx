@@ -199,25 +199,7 @@ export default function BlogCreate() {
               />
             </div>
 
-            <div>
-              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Order</label>
-              <input
-                type="number"
-                value={order}
-                onChange={(e) => setOrder(Number(e.target.value))}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: '1px solid #4b5563',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  backgroundColor: '#374151',
-                  color: '#f9fafb',
-                  boxSizing: 'border-box'
-                }}
-                placeholder="0"
-              />
-            </div>
+           
 
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Category</label>
