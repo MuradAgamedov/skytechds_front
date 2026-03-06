@@ -16,6 +16,7 @@ import {
   FileText,
   BookOpen,
   FolderTree,
+  Quote,
 } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -69,6 +70,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         { id: 'about', label: 'About', path: '/about' },
         { id: 'services', label: 'Services', path: '/services' },
         { id: 'portfolios', label: 'Portfolios', path: '/portfolios' },
+        { id: 'testimonials', label: 'Testimonials', path: '/testimonials' },
         { id: 'faqs', label: 'FAQs', path: '/faqs' },
         { id: 'statistics', label: 'Statistics', path: '/statistics' },
       ],
