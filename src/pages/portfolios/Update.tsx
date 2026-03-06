@@ -42,8 +42,9 @@ export default function PortfolioUpdate() {
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    fetchLanguages()
-      .then(() => fetchPortfolio())
+    fetchLanguages().then(langs => {
+      if (langs) fetchPortfolio(langs)
+    })
   }, [id])
 
   const fetchLanguages = async () => {
@@ -55,20 +56,23 @@ export default function PortfolioUpdate() {
       })
       if (response.ok) {
         const data = await response.json()
-        setLanguages(data.data || [])
+        const langs = data.data || []
+        setLanguages(langs)
+        return langs
       }
     } catch (err) {
       console.error('Error fetching languages:', err)
+      return null
     }
   }
 
-  const fetchPortfolio = async () => {
+  const fetchPortfolio = async (currentLangs: Language[]) => {
     try {
       const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
       const token = localStorage.getItem('auth_token')
       const response = await fetch(`${apiUrl}/admin/portfolios/${id}`, {
         headers: {
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         }
       })
       if (!response.ok) throw new Error('Failed to fetch portfolio details')
@@ -83,9 +87,11 @@ export default function PortfolioUpdate() {
 
       if (portfolio.translations && Array.isArray(portfolio.translations)) {
         portfolio.translations.forEach((t: any, index: number) => {
-          // Use index+1 as language_id since it's not provided by API
-          const languageId = index + 1
-          initialTitles[languageId] = t.title || ''
+          // Use index to get language id from currentLangs
+          const langId = currentLangs[index]?.id || t.language_id
+          if (langId) {
+            initialTitles[langId] = t.title || ''
+          }
         })
       }
 
@@ -123,11 +129,11 @@ export default function PortfolioUpdate() {
 
       const formData = new FormData()
       formData.append('_method', 'PUT')
-      
+
       if (status !== null) {
         formData.append('status', status.toString())
       }
-      
+
       if (url) {
         formData.append('url', url)
       }
@@ -137,13 +143,14 @@ export default function PortfolioUpdate() {
       }
 
       languages.forEach(lang => {
-        if (titles[lang.id]) formData.append(`translations[title][${lang.id}]`, titles[lang.id])
+        const titleValue = titles[lang.id] || ''
+        formData.append(`translations[title][${lang.id}]`, titleValue)
       })
 
       const response = await fetch(`${apiUrl}/admin/portfolios/${id}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         },
         body: formData
       })

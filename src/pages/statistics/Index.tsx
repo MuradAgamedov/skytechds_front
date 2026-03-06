@@ -244,7 +244,6 @@ export default function StatisticIndex() {
                         }}
                       >
                         <Edit size={12} />
-                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(statistic.id)}
@@ -262,7 +261,6 @@ export default function StatisticIndex() {
                         }}
                       >
                         <Trash2 size={12} />
-                        Delete
                       </button>
                     </div>
                   </td>

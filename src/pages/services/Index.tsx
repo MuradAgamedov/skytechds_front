@@ -7,6 +7,7 @@ interface Service {
     id: number
     icon: string | null
     order: number
+    status: number | 'active' | 'inactive'
     translations: Array<{
         id: number
         title: string
@@ -159,7 +160,7 @@ export default function ServicesIndex() {
                             <tr style={{ backgroundColor: '#374151' }}>
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Icon</th>
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '25%' }}>Title</th>
-                        
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Status</th>
                                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Actions</th>
                             </tr>
                         </thead>
@@ -211,6 +212,19 @@ export default function ServicesIndex() {
                                         }}>
                                             {getTranslationTextFromNested(service.translations) || 'Untitled'}
                                         </div>
+                                    </td>
+                                    <td style={{ padding: '12px', borderBottom: '1px solid #374151' }}>
+                                        <span style={{
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            fontSize: '12px',
+                                            fontWeight: '500',
+                                            backgroundColor: service.status === 1 || service.status === 'active' ? '#10b981' : '#374151',
+                                            color: '#f9fafb',
+                                            border: service.status === 1 || service.status === 'active' ? '1px solid #10b981' : '1px solid #4b5563'
+                                        }}>
+                                            {service.status === 1 || service.status === 'active' ? 'Active' : 'Inactive'}
+                                        </span>
                                     </td>
                                  
                                     <td style={{ padding: '12px', borderBottom: '1px solid #374151' }}>

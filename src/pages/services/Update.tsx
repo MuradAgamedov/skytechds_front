@@ -31,6 +31,7 @@ export default function ServiceUpdate() {
     const [seoDescriptions, setSeoDescriptions] = useState<Record<number, string>>({})
     const [seoKeywords, setSeoKeywords] = useState<Record<number, string>>({})
     const [slug, setSlug] = useState<string>('')
+    const [status, setStatus] = useState<'active' | 'inactive'>('active')
 
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
@@ -78,6 +79,10 @@ export default function ServiceUpdate() {
 
             if (service.slug) {
                 setSlug(service.slug)
+            }
+
+            if (service.status !== undefined) {
+                setStatus(service.status === 1 ? 'active' : 'inactive')
             }
 
             if (service.icon) {
@@ -168,6 +173,7 @@ export default function ServiceUpdate() {
 
             formData.append('_method', 'PUT')
             formData.append('slug', slug)
+            formData.append('status', status === 'active' ? '1' : '0')
 
             if (icon) {
                 formData.append('icon', icon)
@@ -262,7 +268,64 @@ export default function ServiceUpdate() {
                     <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '24px', marginBottom: '24px' }}>
                         {/* General Fields */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-  <div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
+                                <input
+                                    type="text"
+                                    value={slug}
+                                    onChange={(e) => setSlug(e.target.value)}
+                                    style={{ width: '100%', padding: '8px 12px', border: '1px solid #4b5563', borderRadius: '6px', fontSize: '14px', backgroundColor: '#374151', color: '#f9fafb', boxSizing: 'border-box' }}
+                                    placeholder="service-slug"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', color: '#f9fafb' }}>Status</label>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <span style={{ color: status === 'inactive' ? '#ef4444' : '#6b7280', fontSize: '14px' }}>Inactive</span>
+                                    <label style={{ 
+                                        position: 'relative', 
+                                        display: 'inline-block', 
+                                        width: '50px', 
+                                        height: '24px',
+                                        cursor: 'pointer'
+                                    }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={status === 'active'}
+                                            onChange={(e) => setStatus(e.target.checked ? 'active' : 'inactive')}
+                                            style={{ opacity: 0, width: 0, height: 0 }}
+                                        />
+                                        <span style={{
+                                            position: 'absolute',
+                                            cursor: 'pointer',
+                                            top: 0,
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            backgroundColor: status === 'active' ? '#10b981' : '#374151',
+                                            transition: '.4s',
+                                            borderRadius: '24px',
+                                            border: `1px solid ${status === 'active' ? '#10b981' : '#4b5563'}` 
+                                        }}>
+                                            <span style={{
+                                                position: 'absolute',
+                                                content: '""',
+                                                height: '16px',
+                                                width: '16px',
+                                                left: status === 'active' ? '26px' : '3px',
+                                                bottom: '3px',
+                                                backgroundColor: 'white',
+                                                transition: '.4s',
+                                                borderRadius: '50%'
+                                            }} />
+                                        </span>
+                                    </label>
+                                    <span style={{ color: status === 'active' ? '#10b981' : '#6b7280', fontSize: '14px' }}>Active</span>
+                                </div>
+                            </div>
+                         
+                            <div>
                                 <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Inner Image</label>
                                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
                                     {innerImagePreview ? (

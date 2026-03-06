@@ -221,7 +221,6 @@ export default function FaqIndex() {
                           }}
                         >
                           <Edit size={12} />
-                          Edit
                         </button>
                         <button
                           onClick={() => handleDelete(faq.id)}
@@ -239,7 +238,6 @@ export default function FaqIndex() {
                           }}
                         >
                           <Trash2 size={12} />
-                          Delete
                         </button>
                       </div>
                     </td>

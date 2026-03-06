@@ -14,6 +14,7 @@ export default function BlogCategoryCreate() {
   const [languages, setLanguages] = useState<Language[]>([])
   const [activeTab, setActiveTab] = useState<number>(0)
   const [slug, setSlug] = useState('')
+  const [status, setStatus] = useState<number>(1)
 
   const [titles, setTitles] = useState<Record<number, string>>({})
   const [seoTitles, setSeoTitles] = useState<Record<number, string>>({})
@@ -56,6 +57,7 @@ export default function BlogCategoryCreate() {
 
       const payload: any = {
         slug: slug,
+        status: status,
         translations: {
           title: {},
           seo_title: {},
@@ -126,28 +128,66 @@ export default function BlogCategoryCreate() {
       <div style={{ backgroundColor: '#1f2937', borderRadius: '8px', border: '1px solid #374151', padding: '24px', maxWidth: '800px' }}>
         <form onSubmit={handleSubmit}>
 
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
-            <input
-              type="text"
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
-              required
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: '1px solid #4b5563',
-                borderRadius: '6px',
-                fontSize: '14px',
-                backgroundColor: '#374151',
-                color: '#f9fafb',
-                boxSizing: 'border-box'
-              }}
-              placeholder="e.g. tech-news"
-            />
+          <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Slug</label>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                required
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  border: '1px solid #4b5563',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  backgroundColor: '#374151',
+                  color: '#f9fafb',
+                  boxSizing: 'border-box'
+                }}
+                placeholder="e.g. tech-news"
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Status</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ color: status === 0 ? '#ef4444' : '#10b981', fontSize: '14px' }}>
+                  {status === 0 ? 'Inactive' : 'Active'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setStatus(status === 1 ? 0 : 1)}
+                  style={{
+                    width: '48px',
+                    height: '24px',
+                    backgroundColor: status === 1 ? '#10b981' : '#374151',
+                    border: '1px solid #4b5563',
+                    borderRadius: '12px',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '20px',
+                      height: '20px',
+                      backgroundColor: '#f9fafb',
+                      borderRadius: '50%',
+                      position: 'absolute',
+                      top: '1px',
+                      left: status === 1 ? '26px' : '1px',
+                      transition: 'left 0.2s'
+                    }}
+                  />
+                </button>
+              </div>
+            </div>
           </div>
 
-        
+
           <div style={{ marginBottom: '24px' }}>
             <div style={{ display: 'flex', borderBottom: '1px solid #374151' }}>
               {languages.map((language, index) => (

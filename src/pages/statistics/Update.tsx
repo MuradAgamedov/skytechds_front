@@ -43,8 +43,9 @@ export default function StatisticUpdate() {
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    fetchLanguages()
-      .then(() => fetchStatistic())
+    fetchLanguages().then(langs => {
+      if (langs) fetchStatistic(langs)
+    })
   }, [id])
 
   const fetchLanguages = async () => {
@@ -58,14 +59,17 @@ export default function StatisticUpdate() {
       })
       if (!response.ok) throw new Error('Failed to fetch languages')
       const data = await response.json()
-      setLanguages(data.data || [])
+      const langs = data.data || []
+      setLanguages(langs)
+      return langs
     } catch (err) {
       console.error('Error fetching languages:', err)
       setErrorMessage('Failed to load languages.')
+      return null
     }
   }
 
-  const fetchStatistic = async () => {
+  const fetchStatistic = async (currentLangs: Language[]) => {
     if (!id) return
 
     try {
@@ -80,7 +84,7 @@ export default function StatisticUpdate() {
       const data = await response.json()
       const statistic = data.data
 
-      setStatus(statistic.status || 1)
+      setStatus(statistic.status || 0)
       if (statistic.icon) setIconPreview(statistic.icon)
 
       const initialTitles: Record<number, string> = {}
@@ -89,11 +93,12 @@ export default function StatisticUpdate() {
 
       if (statistic.translations && Array.isArray(statistic.translations)) {
         statistic.translations.forEach((t: any, index: number) => {
-          // Use index+1 as language_id since it's not provided by API
-          const languageId = index + 1
-          initialTitles[languageId] = t.title || ''
-          initialSubtitles[languageId] = t.subtitle || ''
-          initialIconAltTexts[languageId] = t.icon_alt_text || ''
+          const langId = currentLangs[index]?.id || t.language_id
+          if (langId) {
+            initialTitles[langId] = t.title || ''
+            initialSubtitles[langId] = t.subtitle || ''
+            initialIconAltTexts[langId] = t.icon_alt_text || ''
+          }
         })
       }
 
@@ -135,22 +140,16 @@ export default function StatisticUpdate() {
       const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
       const token = localStorage.getItem('auth_token')
 
-      // Create JSON data for all fields except icon
-      const jsonData: any = {
-        status: status === 1 ? true : false,
-        translations: {}
-      }
-
-      // Add translations in flat format (API expects this)
-      languages.forEach(lang => {
-        jsonData.translations[`title.${lang.id}`] = titles[lang.id] || ''
-        jsonData.translations[`subtitle.${lang.id}`] = subtitles[lang.id] || ''
-        jsonData.translations[`icon_alt_text.${lang.id}`] = iconAltTexts[lang.id] || ''
-      })
-
-      // Create FormData and add JSON data
       const formData = new FormData()
-      formData.append('data', JSON.stringify(jsonData))
+      formData.append('_method', 'PUT')
+      formData.append('status', status === 1 ? '1' : '0')
+
+      // Use bracket notation for translation compatibility
+      languages.forEach(lang => {
+        formData.append(`translations[title][${lang.id}]`, titles[lang.id] || '')
+        formData.append(`translations[subtitle][${lang.id}]`, subtitles[lang.id] || '')
+        formData.append(`translations[icon_alt_text][${lang.id}]`, iconAltTexts[lang.id] || '')
+      })
 
       // Add icon file if exists
       if (icon) {
@@ -158,7 +157,7 @@ export default function StatisticUpdate() {
       }
 
       const response = await fetch(`${apiUrl}/admin/statistics/${id}`, {
-        method: 'PUT',
+        method: 'POST', // Using POST with _method=PUT for multipart/form-data
         headers: {
           'Authorization': `Bearer ${token}`
         },
@@ -171,7 +170,7 @@ export default function StatisticUpdate() {
       }
 
       const data = await response.json()
-      
+
       await Swal.fire({
         title: 'Success!',
         text: 'Statistic updated successfully.',

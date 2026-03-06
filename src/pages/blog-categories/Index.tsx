@@ -229,7 +229,8 @@ export default function BlogCategoriesIndex() {
             <thead>
               <tr style={{ backgroundColor: '#374151' }}>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '20%' }}>Slug</th>
-                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '40%' }}>Title</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '30%' }}>Title</th>
+                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '10%' }}>Status</th>
                 <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '10%' }}>Actions</th>
               </tr>
             </thead>
@@ -241,7 +242,7 @@ export default function BlogCategoriesIndex() {
                       {category.slug}
                     </div>
                   </td>
-                  <td style={{ padding: '12px', borderBottom: '1px solid #374151', color: '#f9fafb', width: '40%' }}>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #374151', color: '#f9fafb', width: '30%' }}>
                     <div style={{
                       maxWidth: '300px',
                       overflow: 'hidden',
@@ -252,6 +253,19 @@ export default function BlogCategoriesIndex() {
                         getTranslationTextFromNested(category.translations, 'title', 4) ||
                         getTranslationTextFromNested(category.translations, 'title', 5)}
                     </div>
+                  </td>
+                  <td style={{ padding: '12px', borderBottom: '1px solid #374151', color: '#f9fafb', width: '10%' }}>
+                    <span style={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      backgroundColor: category.status === 1 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                      color: category.status === 1 ? '#10b981' : '#ef4444',
+                      border: `1px solid ${category.status === 1 ? '#10b981' : '#ef4444'}`
+                    }}>
+                      {category.status === 1 ? 'Active' : 'Inactive'}
+                    </span>
                   </td>
 
                   <td style={{ padding: '12px', borderBottom: '1px solid #374151', width: '10%' }}>

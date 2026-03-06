@@ -71,17 +71,18 @@ export default function PortfolioCreate() {
       if (cardImage) {
         formData.append('card_image', cardImage)
       }
-      
+
       if (status !== null) {
         formData.append('status', status.toString())
       }
-      
+
       if (url) {
         formData.append('url', url)
       }
 
       languages.forEach(lang => {
-        if (titles[lang.id]) formData.append(`translations[title][${lang.id}]`, titles[lang.id])
+        const titleValue = titles[lang.id] || ''
+        formData.append(`translations[title][${lang.id}]`, titleValue)
       })
 
       const response = await fetch(`${apiUrl}/admin/portfolios`, {
