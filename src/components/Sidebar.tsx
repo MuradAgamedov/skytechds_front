@@ -90,8 +90,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     },
 
     { id: 'projects', label: 'Projects', icon: Briefcase, path: '/projects' },
-    { id: 'team', label: 'Team Members', icon: Users, path: '/team' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
 
   const handleMenuClick = (item: any) => {
