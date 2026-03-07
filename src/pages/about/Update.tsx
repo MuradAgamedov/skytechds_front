@@ -32,7 +32,9 @@ export default function AboutUpdate() {
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(() => {
-        fetchLanguages().then(() => fetchAbout())
+        fetchLanguages().then(langs => {
+            if (langs) fetchAbout(langs)
+        })
     }, [])
 
     const fetchLanguages = async () => {
@@ -41,24 +43,27 @@ export default function AboutUpdate() {
             const token = localStorage.getItem('auth_token')
             const response = await fetch(`${apiUrl}/admin/languages`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` 
                 }
             })
             if (!response.ok) throw new Error('Failed to fetch languages')
             const data = await response.json()
-            setLanguages(data.data || [])
+            const langs = data.data || []
+            setLanguages(langs)
+            return langs
         } catch (err) {
             console.error('Error fetching languages:', err)
+            return null
         }
     }
 
-    const fetchAbout = async () => {
+    const fetchAbout = async (currentLangs: Language[]) => {
         try {
             const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
             const token = localStorage.getItem('auth_token')
             const res = await fetch(`${apiUrl}/admin/about`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}` 
                 }
             })
             if (!res.ok) throw new Error('Failed to fetch About data')
@@ -72,15 +77,14 @@ export default function AboutUpdate() {
             const initialTexts: Record<number, string> = {}
             const initialAltTexts: Record<number, string> = {}
 
-            // Note: The API response doesn't directly map language_code/id in the translations array snippet user provided.
-            // But typically, translation arrays have `language_id` or similar. Assuming index + 1 or actual DB id mappings map properly if we merge data. 
-            // We'll safely map if there's language_id or rely on the UI to populate it from empty state.
-            if (aboutData.translations) {
+            // Map translations by array index to language ID
+            if (aboutData.translations && currentLangs) {
                 aboutData.translations.forEach((t: any, index: number) => {
-                    // Fallback to index mapping if language_id is missing, but usually it exists in full response
-                    const langId = t.language_id || (index + 3) // Hardcoding fallback based on typical 3=az, 4=en, 5=ru
-                    initialTexts[langId] = t.text || ''
-                    initialAltTexts[langId] = t.image_alt_text || ''
+                    const langId = currentLangs[index]?.id
+                    if (langId) {
+                        initialTexts[langId] = t.text || ''
+                        initialAltTexts[langId] = t.image_alt_text || ''
+                    }
                 })
             }
 

@@ -54,6 +54,8 @@ import StatisticUpdate from "./pages/statistics/Update"
 import TestimonialsIndex from "./pages/testimonials/Index"
 import TestimonialCreate from "./pages/testimonials/Create"
 import TestimonialUpdate from "./pages/testimonials/Update"
+// Site Information
+import SiteInfoUpdate from "./pages/site-info/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -130,6 +132,7 @@ function App() {
           <Route path="statistics" element={<StatisticIndex />} />
           <Route path="statistics/create" element={<StatisticCreate />} />
           <Route path="statistics/:id/edit" element={<StatisticUpdate />} />
+          <Route path="site-info" element={<SiteInfoUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>
