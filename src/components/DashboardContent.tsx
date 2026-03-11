@@ -9,7 +9,6 @@ export default function DashboardContent() {
   const stats = [
     { label: 'Total Revenue', value: '$124,580', change: '+12.5%', icon: DollarSign, trend: 'up' },
     { label: 'Active Projects', value: '18', change: '+4 this month', icon: Briefcase, trend: 'up' },
-    { label: 'Team Members', value: '42', change: '+2 new', icon: Users, trend: 'up' },
     { label: 'Client Score', value: '4.8/5', change: '+0.2 points', icon: TrendingUp, trend: 'up' },
   ];
 

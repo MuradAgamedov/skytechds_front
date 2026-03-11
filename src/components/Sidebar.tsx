@@ -17,6 +17,7 @@ import {
   BookOpen,
   FolderTree,
   Quote,
+  Image,
 } from 'lucide-react';
 
 import { useState, useEffect } from 'react';
@@ -74,6 +75,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         { id: 'pages', label: 'Pages', path: '/pages' },
         { id: 'faqs', label: 'FAQs', path: '/faqs' },
         { id: 'statistics', label: 'Statistics', path: '/statistics' },
+        { id: 'site-info', label: 'Site Information', path: '/site-info' },
       ],
     },
 
@@ -89,8 +91,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
     },
 
     { id: 'projects', label: 'Projects', icon: Briefcase, path: '/projects' },
-    { id: 'team', label: 'Team Members', icon: Users, path: '/team' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
   ];
 
   const handleMenuClick = (item: any) => {

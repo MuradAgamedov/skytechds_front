@@ -18,8 +18,6 @@ interface Language {
 interface Dictionary {
     id: number
     keyword: string
-    order: number
-    status: number | boolean
     translations: Translation[]
 }
 
@@ -30,9 +28,7 @@ export default function DictionaryUpdate() {
     const [activeTab, setActiveTab] = useState<number>(0)
     const [formData, setFormData] = useState({
         keyword: '',
-        order: 1,
-        translations: {} as Record<number, string>,
-        status: true as boolean
+        translations: {} as Record<number, string>
     })
 
     const [loading, setLoading] = useState(true)
@@ -94,9 +90,7 @@ export default function DictionaryUpdate() {
 
             setFormData({
                 keyword: dictionary.keyword,
-                order: dictionary.order,
-                translations: translations,
-                status: dictionary.status === 1 || dictionary.status === true || dictionary.status === 'active'
+                translations: translations
             })
         } catch (err) {
             console.error('Error loading dictionary:', err)
@@ -120,8 +114,6 @@ export default function DictionaryUpdate() {
             const token = localStorage.getItem('auth_token')
 
             const payload = {
-                status: formData.status,
-                order: formData.order,
                 keyword: formData.keyword,
                 translations: {
                     value: formData.translations
@@ -213,25 +205,6 @@ export default function DictionaryUpdate() {
                         />
                     </div>
 
-                    <div style={{ marginBottom: '20px' }}>
-                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500', color: '#f9fafb' }}>Order</label>
-                        <input
-                            type="number"
-                            value={formData.order}
-                            onChange={(e) => setFormData(prev => ({ ...prev, order: Number(e.target.value) }))}
-                            required
-                            style={{
-                                width: '100%',
-                                padding: '10px 12px',
-                                border: '1px solid #4b5563',
-                                borderRadius: '6px',
-                                backgroundColor: '#374151',
-                                color: '#f9fafb',
-                                boxSizing: 'border-box'
-                            }}
-                        />
-                    </div>
-
                     {/* Tabs */}
                     <div style={{ marginBottom: '24px' }}>
                         <div style={{ display: 'flex', borderBottom: '1px solid #374151' }}>
@@ -286,52 +259,6 @@ export default function DictionaryUpdate() {
                                 />
                             </div>
                         ))}
-                    </div>
-
-                    <div style={{ marginBottom: '24px' }}>
-                        <label style={{ display: 'block', marginBottom: '4px', fontWeight: '500', color: '#f9fafb' }}>Status</label>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: !formData.status ? '#ef4444' : '#6b7280', fontSize: '14px' }}>Inactive</span>
-                            <label style={{
-                                position: 'relative',
-                                display: 'inline-block',
-                                width: '50px',
-                                height: '24px',
-                                cursor: 'pointer'
-                            }}>
-                                <input
-                                    type="checkbox"
-                                    checked={formData.status}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.checked }))}
-                                    style={{ opacity: 0, width: 0, height: 0 }}
-                                />
-                                <span style={{
-                                    position: 'absolute',
-                                    cursor: 'pointer',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    backgroundColor: formData.status ? '#10b981' : '#374151',
-                                    transition: '.4s',
-                                    borderRadius: '24px',
-                                    border: `1px solid ${formData.status ? '#10b981' : '#4b5563'}`
-                                }}>
-                                    <span style={{
-                                        position: 'absolute',
-                                        content: '""',
-                                        height: '16px',
-                                        width: '16px',
-                                        left: formData.status ? '26px' : '3px',
-                                        bottom: '3px',
-                                        backgroundColor: 'white',
-                                        transition: '.4s',
-                                        borderRadius: '50%'
-                                    }} />
-                                </span>
-                            </label>
-                            <span style={{ color: formData.status ? '#10b981' : '#6b7280', fontSize: '14px' }}>Active</span>
-                        </div>
                     </div>
 
                     {errorMessage && (

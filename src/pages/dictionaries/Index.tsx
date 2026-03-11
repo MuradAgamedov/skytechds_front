@@ -13,8 +13,6 @@ interface Translation {
 interface Dictionary {
     id: number
     keyword: string
-    order: number
-    status: number | boolean
     translations: Translation[]
 }
 
@@ -209,11 +207,9 @@ export default function DictionariesIndex() {
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ backgroundColor: '#374151' }}>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '25%' }}>Keyword</th>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '30%' }}>Value</th>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Order</th>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Status</th>
-                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '15%' }}>Actions</th>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '35%' }}>Keyword</th>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '45%' }}>Value</th>
+                                <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #4b5563', color: '#f9fafb', width: '20%' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
