@@ -19,7 +19,6 @@ interface Faq {
     language_id: number
   }>
   status: number
-  order?: number
 }
 
 export default function FaqUpdate() {
@@ -74,7 +73,7 @@ export default function FaqUpdate() {
       const data = await response.json()
       const faq = data.data
 
-      setStatus(faq.status || 1)
+      setStatus(faq.status !== undefined ? faq.status : 1)
 
       const initialQuestions: Record<number, string> = {}
       const initialAnswers: Record<number, string> = {}

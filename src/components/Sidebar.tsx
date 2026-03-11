@@ -73,6 +73,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         { id: 'portfolios', label: 'Portfolios', path: '/portfolios' },
         { id: 'testimonials', label: 'Testimonials', path: '/testimonials' },
         { id: 'pages', label: 'Pages', path: '/pages' },
+        { id: 'all-seo', label: 'All SEO', path: '/all-seo' },
         { id: 'faqs', label: 'FAQs', path: '/faqs' },
         { id: 'statistics', label: 'Statistics', path: '/statistics' },
         { id: 'site-info', label: 'Site Information', path: '/site-info' },

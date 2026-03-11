@@ -163,40 +163,43 @@ export default function StatisticIndex() {
       <div style={{ backgroundColor: '#1f2937', borderRadius: '8px', border: '1px solid #374151', overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <tr style={{ backgroundColor: '#374151' }}>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>ID</th>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Title</th>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Subtitle</th>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Icon</th>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Status</th>
-              <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Actions</th>
-            </tr>
-            {filteredStatistics.length === 0 ? (
-              <tr>
-                <td colSpan={6} style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
-                  No statistics found.
-                </td>
+            <thead>
+              <tr style={{ backgroundColor: '#374151' }}>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>ID</th>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Title</th>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Subtitle</th>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Icon</th>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Status</th>
+                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Actions</th>
               </tr>
-            ) : (
-              filteredStatistics.map((statistic) => (
-                <tr key={statistic.id} style={{ borderBottom: '1px solid #374151' }}>
-                  <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>{statistic.id}</td>
-                  <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
-                    {getStatisticTitle(statistic)}
+            </thead>
+            <tbody>
+              {filteredStatistics.length === 0 ? (
+                <tr>
+                  <td colSpan={6} style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
+                    No statistics found.
                   </td>
-                  <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
-                    <div style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {getStatisticSubtitle(statistic)}
-                    </div>
-                  </td>
-                  <td style={{ padding: '12px' }}>
-                    {statistic.icon ? (
-                      <img
-                        src={statistic.icon}
-                        alt="Icon"
-                        style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
-                      />
-                    ) : (
+                </tr>
+              ) : (
+                filteredStatistics.map((statistic) => (
+                  <tr key={statistic.id} style={{ borderBottom: '1px solid #374151' }}>
+                    <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>{statistic.id}</td>
+                    <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
+                      {getStatisticTitle(statistic)}
+                    </td>
+                    <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
+                      <div style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {getStatisticSubtitle(statistic)}
+                      </div>
+                    </td>
+                    <td style={{ padding: '12px' }}>
+                      {statistic.icon ? (
+                        <img
+                          src={statistic.icon}
+                          alt="Icon"
+                          style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                        />
+                      ) : (
                       <div style={{
                         width: '40px',
                         height: '40px',
@@ -267,6 +270,7 @@ export default function StatisticIndex() {
                 </tr>
               ))
             )}
+            </tbody>
           </table>
         </div>
       </div>
