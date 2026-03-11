@@ -54,6 +54,10 @@ import StatisticUpdate from "./pages/statistics/Update"
 import TestimonialsIndex from "./pages/testimonials/Index"
 import TestimonialCreate from "./pages/testimonials/Create"
 import TestimonialUpdate from "./pages/testimonials/Update"
+// Pages
+import PagesIndex from "./pages/pages/Index"
+import PageCreate from "./pages/pages/Create"
+import PageUpdate from "./pages/pages/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -124,6 +128,9 @@ function App() {
           <Route path="testimonials" element={<TestimonialsIndex />} />
           <Route path="testimonials/create" element={<TestimonialCreate />} />
           <Route path="testimonials/:id/edit" element={<TestimonialUpdate />} />
+          <Route path="pages" element={<PagesIndex />} />
+          <Route path="pages/create" element={<PageCreate />} />
+          <Route path="pages/:id/edit" element={<PageUpdate />} />
           <Route path="faqs" element={<FaqIndex />} />
           <Route path="faqs/create" element={<FaqCreate />} />
           <Route path="faqs/:id/edit" element={<FaqUpdate />} />
