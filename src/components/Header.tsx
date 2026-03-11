@@ -22,7 +22,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <header className="border-b border-border bg-card h-16 flex items-center justify-between px-6">
-      <div className="flex items-center gap-4">
+      <div style={{ marginLeft: '20px' }} className="flex items-center gap-4">
         <button
           onClick={onMenuClick}
           className="p-2 hover:bg-secondary rounded-lg transition-colors"
