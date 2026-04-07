@@ -62,6 +62,18 @@ import PageUpdate from "./pages/pages/Update"
 import SiteInfoUpdate from "./pages/site-info/Update"
 // All SEO
 import AllSEOUpdate from "./pages/all-seo/Update"
+// Admin Permissions
+import PermissionsIndex from "./pages/admin/permissions/Index"
+import PermissionCreate from "./pages/admin/permissions/Create"
+import PermissionUpdate from "./pages/admin/permissions/Update"
+// Admin Roles
+import RolesIndex from "./pages/admin/roles/Index"
+import RoleCreate from "./pages/admin/roles/Create"
+import RoleUpdate from "./pages/admin/roles/Update"
+// Admin Users
+import UsersIndex from "./pages/admin/users/Index"
+import UserCreate from "./pages/admin/users/Create"
+import UserUpdate from "./pages/admin/users/Update"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth()
@@ -128,21 +140,30 @@ function App() {
           <Route path="services/update/:id" element={<ServiceUpdate />} />
           <Route path="portfolios" element={<PortfolioIndex />} />
           <Route path="portfolios/create" element={<PortfolioCreate />} />
-          <Route path="portfolios/:id/edit" element={<PortfolioUpdate />} />
+          <Route path="portfolios/update/:id" element={<PortfolioUpdate />} />
           <Route path="testimonials" element={<TestimonialsIndex />} />
           <Route path="testimonials/create" element={<TestimonialCreate />} />
-          <Route path="testimonials/:id/edit" element={<TestimonialUpdate />} />
+          <Route path="testimonials/update/:id" element={<TestimonialUpdate />} />
           <Route path="pages" element={<PagesIndex />} />
           <Route path="pages/create" element={<PageCreate />} />
-          <Route path="pages/:id/edit" element={<PageUpdate />} />
+          <Route path="pages/update/:id" element={<PageUpdate />} />
           <Route path="faqs" element={<FaqIndex />} />
           <Route path="faqs/create" element={<FaqCreate />} />
-          <Route path="faqs/:id/edit" element={<FaqUpdate />} />
+          <Route path="faqs/update/:id" element={<FaqUpdate />} />
           <Route path="statistics" element={<StatisticIndex />} />
           <Route path="statistics/create" element={<StatisticCreate />} />
-          <Route path="statistics/:id/edit" element={<StatisticUpdate />} />
+          <Route path="statistics/update/:id" element={<StatisticUpdate />} />
           <Route path="site-info" element={<SiteInfoUpdate />} />
           <Route path="all-seo" element={<AllSEOUpdate />} />
+          <Route path="admin/permissions" element={<PermissionsIndex />} />
+          <Route path="admin/permissions/create" element={<PermissionCreate />} />
+          <Route path="admin/permissions/update/:id" element={<PermissionUpdate />} />
+          <Route path="admin/roles" element={<RolesIndex />} />
+          <Route path="admin/roles/create" element={<RoleCreate />} />
+          <Route path="admin/roles/update/:id" element={<RoleUpdate />} />
+          <Route path="admin/admins" element={<UsersIndex />} />
+          <Route path="admin/admins/create" element={<UserCreate />} />
+          <Route path="admin/admins/:id/edit" element={<UserUpdate />} />
         </Route>
       </Routes>
     </AuthProvider>

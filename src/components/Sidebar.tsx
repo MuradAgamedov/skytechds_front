@@ -91,6 +91,17 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       ],
     },
 
+    {
+      id: 'admin',
+      label: 'Admin',
+      icon: Settings,
+      children: [
+        { id: 'permissions', label: 'Permissions', path: '/admin/permissions' },
+        { id: 'roles', label: 'Roles', path: '/admin/roles' },
+        { id: 'users', label: 'Users', path: '/admin/admins' },
+      ],
+    },
+
     { id: 'projects', label: 'Projects', icon: Briefcase, path: '/projects' },
   ];
 

@@ -10,7 +10,7 @@ interface AuthContextType {
   token: string | null
   login: (email: string, password: string) => Promise<{ success: boolean; requires2FA: boolean; userId?: number; message?: string }>
   verify2FA: (userId: number, code: string) => Promise<boolean>
-  logout: () => void
+  logout: () => Promise<void>
   isAuthenticated: boolean
   isLoading: boolean
   requires2FA: boolean
@@ -143,13 +143,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }
 
-  const logout = () => {
-    setUser(null)
-    setToken(null)
-    setRequires2FA(false)
-    setPendingUserId(null)
-    localStorage.removeItem('auth_token')
-    localStorage.removeItem('user_data')
+  const logout = async () => {
+    try {
+      const apiUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api'
+      const token = localStorage.getItem('auth_token')
+      
+      if (token) {
+        // Call logout API
+        await fetch(`${apiUrl}/admin/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+      }
+    } catch (error) {
+      console.error('Logout API error:', error)
+    } finally {
+      // Always clear local data regardless of API call success
+      setUser(null)
+      setToken(null)
+      setRequires2FA(false)
+      setPendingUserId(null)
+      localStorage.removeItem('auth_token')
+      localStorage.removeItem('user_data')
+    }
   }
 
   const isAuthenticated = !!token && !!user
