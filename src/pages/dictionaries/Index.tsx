@@ -225,22 +225,6 @@ export default function DictionariesIndex() {
                                         </div>
                                     </td>
                                     <td style={{ padding: '12px', borderBottom: '1px solid #374151', color: '#f9fafb' }}>
-                                        {dictionary.order}
-                                    </td>
-                                    <td style={{ padding: '12px', borderBottom: '1px solid #374151' }}>
-                                        <span
-                                            style={{
-                                                padding: '4px 8px',
-                                                borderRadius: '4px',
-                                                fontSize: '12px',
-                                                backgroundColor: (dictionary.status === 1 || dictionary.status === true || dictionary.status === 'active') ? '#10b981' : '#ef4444',
-                                                color: 'white'
-                                            }}
-                                        >
-                                            {(dictionary.status === 1 || dictionary.status === true || dictionary.status === 'active') ? 'Active' : 'Inactive'}
-                                        </span>
-                                    </td>
-                                    <td style={{ padding: '12px', borderBottom: '1px solid #374151' }}>
                                         <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
                                             <button
                                                 onClick={() => navigate(`/dictionaries/update/${dictionary.id}`)}

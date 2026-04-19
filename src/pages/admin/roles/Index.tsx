@@ -135,14 +135,13 @@ export default function RolesIndex() {
               <tr style={{ backgroundColor: '#374151' }}>
                 <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>ID</th>
                 <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Name</th>
-                <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Created At</th>
                 <th style={{ padding: '12px', textAlign: 'left', color: '#f9fafb', fontWeight: '500', fontSize: '14px' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {roles.length === 0 ? (
                 <tr>
-                  <td colSpan={4} style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
+                  <td colSpan={3} style={{ padding: '24px', textAlign: 'center', color: '#6b7280' }}>
                     No roles found.
                   </td>
                 </tr>
@@ -152,9 +151,6 @@ export default function RolesIndex() {
                     <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>{role.id}</td>
                     <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
                       {role.name}
-                    </td>
-                    <td style={{ padding: '12px', color: '#f9fafb', fontSize: '14px' }}>
-                      {new Date(role.created_at).toLocaleDateString()}
                     </td>
                     <td style={{ padding: '12px' }}>
                       <div style={{ display: 'flex', gap: '8px' }}>

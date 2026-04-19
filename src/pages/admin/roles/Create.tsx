@@ -151,6 +151,116 @@ export default function RoleCreate() {
       permissions: [
         'siteinfo.read'
       ]
+    },
+    {
+      name: 'Tag Management',
+      icon: '🏷️',
+      permissions: [
+        'tag.read',
+        'tag.create',
+        'tag.update',
+        'tag.delete'
+      ]
+    },
+    {
+      name: 'Permission Management',
+      icon: '🔐',
+      permissions: [
+        'permission.read',
+        'permission.create',
+        'permission.update',
+        'permission.delete'
+      ]
+    },
+    {
+      name: 'Role Management',
+      icon: '🎭',
+      permissions: [
+        'role.read',
+        'role.create',
+        'role.update',
+        'role.delete'
+      ]
+    },
+    {
+      name: 'Address Management',
+      icon: '📍',
+      permissions: [
+        'address.read',
+        'address.create',
+        'address.update',
+        'address.delete'
+      ]
+    },
+    {
+      name: 'Email Management',
+      icon: '📧',
+      permissions: [
+        'email.read',
+        'email.create',
+        'email.update',
+        'email.delete'
+      ]
+    },
+    {
+      name: 'Map Management',
+      icon: '🗺️',
+      permissions: [
+        'map.read',
+        'map.create',
+        'map.update',
+        'map.delete'
+      ]
+    },
+    {
+      name: 'Language Management',
+      icon: '🌍',
+      permissions: [
+        'language.read',
+        'language.create',
+        'language.update',
+        'language.delete'
+      ]
+    },
+    {
+      name: 'Dictionary Management',
+      icon: '📚',
+      permissions: [
+        'dictionary.read',
+        'dictionary.create',
+        'dictionary.update',
+        'dictionary.delete'
+      ]
+    },
+    {
+      name: 'Blog Category Management',
+      icon: '📂',
+      permissions: [
+        'blogcategory.read',
+        'blogcategory.create',
+        'blogcategory.update',
+        'blogcategory.delete'
+      ]
+    },
+    {
+      name: 'All SEO Management',
+      icon: '🔍',
+      permissions: [
+        'allseo.read',
+        'allseo.create',
+        'allseo.update',
+        'allseo.delete'
+      ]
+    },
+    {
+      name: 'Phone Management',
+      icon: '📞',
+      permissions: [
+        'phone.read',
+        'phone.create',
+        'phone.update',
+        'phone.delete'
+      ]
     }
   ]
 

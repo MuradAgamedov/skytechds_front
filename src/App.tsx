@@ -160,7 +160,7 @@ function App() {
           <Route path="admin/permissions/update/:id" element={<PermissionUpdate />} />
           <Route path="admin/roles" element={<RolesIndex />} />
           <Route path="admin/roles/create" element={<RoleCreate />} />
-          <Route path="admin/roles/update/:id" element={<RoleUpdate />} />
+          <Route path="admin/roles/:id/edit" element={<RoleUpdate />} />
           <Route path="admin/admins" element={<UsersIndex />} />
           <Route path="admin/admins/create" element={<UserCreate />} />
           <Route path="admin/admins/:id/edit" element={<UserUpdate />} />
