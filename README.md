@@ -1,16 +1,62 @@
-# React + Vite
+# SkyTechDS Admin Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for the SkyTechDS website admin dashboard. Built with React, TypeScript, and Vite, it connects to a backend API to manage site content (blogs, services, portfolio, translations, etc.).
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript**
+- **Vite 7** — build and dev server
+- **Tailwind CSS 4** — styling
+- **React Router 7** — page navigation
+- **shadcn/ui** components (`src/components/ui`)
 
-## React Compiler
+## Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+```
 
-## Expanding the ESLint configuration
+Create a `.env` file in the project root (example):
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+VITE_API_URL=http://127.0.0.1:8000/api
+VITE_APP_NAME=MyReactApp
+```
+
+## Running
+
+```bash
+npm run dev       # development server
+npm run build     # production build
+npm run preview   # locally preview the build
+npm run lint      # run ESLint
+```
+
+## Project Structure
+
+```
+src/
+├── components/       # Shared components (Header, Sidebar, cards, etc.)
+│   └── ui/           # shadcn/ui-based UI components
+├── contexts/         # AuthContext — authentication state
+├── layouts/           # DashboardLayout — main panel layout
+├── pages/            # Pages grouped by module (Index/Create/Update)
+├── App.tsx           # Route definitions
+└── main.tsx          # Application entry point
+```
+
+## Modules
+
+The panel consists of Index/Create/Update pages for managing the following sections:
+
+- Languages, phones, emails, maps, addresses, social networks
+- Contact messages
+- Dictionaries and translations
+- About, site info, global SEO
+- Blog categories, blogs, tags
+- Services, portfolio, testimonials, FAQ, statistics, pages
+- Admin section: users, roles, and permissions
+
+## Authentication
+
+Login is handled via the `/login` route through `AuthContext`. All other routes are protected by `ProtectedRoute` — without a valid token, the user is automatically redirected to `/login`.
